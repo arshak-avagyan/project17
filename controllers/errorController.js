@@ -6,7 +6,9 @@ const handleCastErrorDB = (err) => {
 };
 
 const handleDublicateFieldsErrorDB = (err) => {
-  const message = `Dublicate field value:${err.keyValue.name}. Please use another value.`;
+  const message = `Dublicate field, value: ${
+    Object.keys(err.keyValue)[0]
+  }. Please use another value.`;
   return new AppError(message, 400);
 };
 

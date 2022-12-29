@@ -1,7 +1,6 @@
 const multer = require('multer');
 const sharp = require('sharp');
 const Tour = require('../models/tourModel');
-const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const {
@@ -46,7 +45,7 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
   // 2) Images
   req.body.images = [];
 
-  // We use Promise.all because we need to await until all the images are served, and onlt then call next(). In our case although the callbacks inside the loop are async await, actually we are awaititng only for the callbacks and not the outer entire loop itself.
+  // Use Promise.all because we need to await until all the images are served, and onlt then call next(). In our case although the callbacks inside the loop are async await, actually we are awaititng only for the callbacks and not the outer entire loop itself.
   await Promise.all(
     req.files.images.map(async (file, i) => {
       const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
@@ -71,80 +70,10 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-// exports.getAllTours = catchAsync(async (req, res, next) => {
-//   const features = new APIFeatures(Tour.find(), req.query)
-//     .filter()
-//     .sort()
-//     .limitFields()
-//     .paginte();
-//   const tours = await features.query;
-
-//   // Send response
-//   res.status(200).json({
-//     status: 'success',
-//     result: tours.length,
-//     data: { tours },
-//   });
-// });
-
 exports.getAllTours = getAll(Tour);
-
-// exports.getTour = catchAsync(async (req, res, next) => {
-//   const tour = await Tour.findById(req.params.id).populate('reviews');
-
-//   if (!tour) {
-//     return next(new AppError('No tour found with that ID', 404));
-//   }
-
-//   res.status(200).json({
-//     status: 'success',
-//     data: { tour },
-//   });
-// });
-
 exports.getTour = getOne(Tour, { path: 'reviews' });
-
-// exports.createTour = catchAsync(async (req, res, next) => {
-//   const newTour = await Tour.create(req.body);
-//   res.status(201).json({
-//     status: 'success',
-//     data: { tour: newTour },
-//   });
-// });
-
 exports.createTour = createOne(Tour);
-
-// exports.updateTour = catchAsync(async (req, res, next) => {
-//   const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-//     new: true, //to return the updated version
-//     runValidators: true,
-//   });
-
-//   if (!tour) {
-//     return next(new AppError('No tour found with that ID', 404));
-//   }
-
-//   res.status(200).json({
-//     status: 'success',
-//     data: { tour },
-//   });
-// });
-
 exports.updateTour = updateOne(Tour);
-
-// exports.deleteTour = catchAsync(async (req, res, next) => {
-//   const tour = await Tour.findByIdAndDelete(req.params.id);
-
-//   if (!tour) {
-//     return next(new AppError('No tour found with that ID', 404));
-//   }
-
-//   res.status(204).json({
-//     status: 'success',
-//     data: null,
-//   });
-// });
-
 exports.deleteTour = deleteOne(Tour);
 
 exports.getTourStats = catchAsync(async (req, res, next) => {
@@ -155,7 +84,6 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
     {
       $group: {
         _id: '$difficulty',
-        // _id: '$difficulty',
         num: { $sum: 1 },
         numOfRatings: { $sum: '$ratingsQuantity' },
         avgRating: { $avg: '$ratingsAverage' },
@@ -167,9 +95,6 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
     {
       $sort: { avgPrice: 1 },
     },
-    // {
-    //   $match: { _id: { $ne: 'easy' } },
-    // },
   ]);
 
   res.status(200).json({

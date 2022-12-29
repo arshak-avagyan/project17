@@ -173,18 +173,11 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
-  // const message = `Frogot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email.`;
   try {
     // 3) Send it to user's email
     const resetURL = `${req.protocol}://${req.get(
       'host'
     )}/api/v1/users/resetPassword/${resetToken}`;
-
-    // await sendEmail({
-    //   email: user.email,
-    //   subject: 'Password reset token',
-    //   message,
-    // });
 
     await new Email(user, resetURL).sendPasswordReset();
   } catch (err) {
@@ -225,8 +218,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   await user.save();
 
-  // 3) Update changePasswordAt property for the user
-
   // 4) Log the user in, send JWT
   createSendToken(user, 200, res);
 });
@@ -242,8 +233,8 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   // 3) Update the password
   user.password = req.body.password;
-  user.passwordConfirm = req.body.password;
-  await user.save(); // we do  not use findByIdAndUpdate because model validators and middlewares work on save method and not update
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
 
   // 4) Log user in, send JWT
   createSendToken(user, 200, res);

@@ -104,7 +104,6 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 
   // False means not changed
   return false;
-  // return await bcrypt.compare(candidatePassword, userPassword);
 };
 
 userSchema.methods.createPasswordResetToken = function () {

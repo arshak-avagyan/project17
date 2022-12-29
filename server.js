@@ -15,13 +15,14 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 );
 
+// Do not catch because we do not want the app to start without connecting to db
 mongoose.connect(DB).then(() => {
   console.log('Successfuly connected to DB !');
 });
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
-  console.log(`App running on port ${PORT}`);
+  console.log(`App is running on port ${PORT}`);
 });
 
 // Global handler for unhandled rejections

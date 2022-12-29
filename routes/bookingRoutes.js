@@ -3,9 +3,9 @@ const {
   getCheckoutSession,
   getAllBookings,
   getBooking,
+  createBooking,
   updateBooking,
   deleteBooking,
-  createBooking,
 } = require('../controllers/bookingController');
 const { protect, restrictTo } = require('../controllers/authController');
 

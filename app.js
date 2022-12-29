@@ -20,9 +20,7 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-// Global middleware
-
-// Serving static files. All the static assets will authomatically be srved from the folder called 'public'
+// Serving static files. All the static assets will authomatically be served from the folder called 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security HTTP headers. Helmet good to add at the very beginning
@@ -78,14 +76,13 @@ app.use(
 );
 
 // ROUTES
-
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/bookings', bookingRouter);
 
-// Handling unhandled requested
+// Handling unhandled requests
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });

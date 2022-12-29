@@ -1,8 +1,8 @@
 const express = require('express');
 const {
   getAllTours,
-  createTour,
   getTour,
+  createTour,
   updateTour,
   deleteTour,
   aliasTopTours,

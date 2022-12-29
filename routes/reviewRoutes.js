@@ -1,11 +1,11 @@
 const express = require('express');
 const {
   getAllReviews,
-  createReview,
-  deleteReview,
-  updateReview,
-  setTourUserIds,
   getReview,
+  createReview,
+  updateReview,
+  deleteReview,
+  setTourUserIds,
 } = require('../controllers/reviewController');
 const { protect, restrictTo } = require('../controllers/authController');
 
