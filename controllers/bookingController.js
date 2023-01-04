@@ -32,7 +32,12 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
           product_data: {
             name: `${tour.name} Tour`,
             description: tour.summary,
-            // images: Add the link of images from the hosted website
+            // Image issue on side of stripe
+            // images: [
+            //   `${req.protocol}://${req.get('host')}/img/tours/${
+            //     tour.imageCover
+            //   }`,
+            // ],
           },
         },
         quantity: 1,

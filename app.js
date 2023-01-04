@@ -7,6 +7,10 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const compression = require('compression');
+const cors = require('cors');
+
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
@@ -20,6 +24,11 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(cors());
+
+// options is another http method like the others
+app.options('*', cors());
+
 // Serving static files. All the static assets will authomatically be served from the folder called 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -28,8 +37,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'", 'blob:', 'https://*.mapbox.com'],
-      scriptSrc: ["'self'", 'https://*.mapbox.com', "'unsafe-inline'", 'blob:'],
+      defaultSrc: [
+        "'self'",
+        'blob:',
+        'https://*.mapbox.com',
+        'https://js.stripe.com/v3/',
+      ],
+      scriptSrc: [
+        "'self'",
+        'https://*.mapbox.com',
+        'https://js.stripe.com/v3/',
+        "'unsafe-inline'",
+        'blob:',
+      ],
     },
   })
 );
@@ -47,6 +67,12 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter);
+
+// app.post(
+//   '/webhook-checkout',
+//   bodyParser.raw({ type: 'application/json' }),
+//   webhookCheckout
+// );
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
@@ -74,6 +100,8 @@ app.use(
     ],
   })
 );
+
+app.use(compression());
 
 // ROUTES
 app.use('/', viewRouter);
