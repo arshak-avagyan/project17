@@ -1,6 +1,6 @@
-This project is a travel agency website. Please do not pay attention to UI/UX, because the whole project is done by backend developer. Webiste is built using Node.js, Express, MongoDB, Mongoose, JWT, Stripe, Bcrypt and other technologies.
-Note that on github you can see only backend code, most of code responsible for the frontend is removed. Please also note that some functionalities are not developed yet.
+This project is a travel agency website. Please do not pay attention to UI/UX, because the whole project is done by backend developer. Webiste is built using Node.js, Express, MongoDB, Mongoose, and other technologies.
+Note that some functionalities are not available yet.
 
 Author: Arshak Avagyan
 
-To visit the website go through the following link:
+To visit the website go through the following link: https://avagyantravel.onrender.com/
